@@ -10,6 +10,7 @@ let cloudCircles = 30;
 let clouds = [];
 let flowersPos = [];
 let starsPos = [];
+let animating = true;
 
 //Call functions
 setup();
@@ -17,6 +18,16 @@ flowers();
 stars();
 drawClouds();
 movingClouds();
+
+//Stop animation when pressing spacebar
+window.addEventListener("keydown", function (event) {
+	if (event.code === "Space") {
+		animating = !animating;
+		if (animating) {
+			movingClouds();
+		}
+	}
+});
 
 function setup() {
 	ground();
@@ -137,6 +148,8 @@ function signature(x, y) {
 
 //Draw moving clouds
 function movingClouds() {
+	if (!animating) return;
+
 	context.clearRect(0, 0, width, height);
 
 	setup();
@@ -157,5 +170,7 @@ function movingClouds() {
 
 	signature(width - 65, height - 65);
 
-	requestAnimationFrame(movingClouds);
+	if (animating) {
+		requestAnimationFrame(movingClouds);
+	}
 }
