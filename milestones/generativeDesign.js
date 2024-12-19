@@ -7,8 +7,7 @@ let width = context.canvas.width;
 let height = context.canvas.height;
 let r = Utils.randomNumber(0, 255);
 let cloudCircles = 30;
-let xCloud = 0;
-let speed = 1;
+let clouds = [];
 let flowersPos = [];
 let starsPos = [];
 
@@ -16,6 +15,7 @@ let starsPos = [];
 setup();
 flowers();
 stars();
+drawClouds();
 movingClouds();
 
 function setup() {
@@ -88,6 +88,34 @@ function star(x, y) {
 	Utils.fillCircle(x, y, 2);
 }
 
+//Draw clouds
+function drawClouds() {
+	clouds = [];
+	for (let i = 0; i < 5; i++) {
+		let x = Utils.randomNumber(-50, width);
+		let speed = Utils.randomNumber(1, 3);
+		clouds.push({ x, speed });
+	}
+}
+
+function makeClouds() {
+	context.fillStyle = "white";
+	for (let i = 0; i < clouds.length; i++) {
+		let cloud = clouds[i];
+		cloud.x += cloud.speed;
+
+		if (cloud.x > width + cloudCircles + 70) {
+			cloud.x = -cloudCircles;
+		}
+
+		Utils.fillCircle(cloud.x, 100 + i * 50, cloudCircles);
+		Utils.fillCircle(cloud.x - 20, 70 + i * 50, cloudCircles);
+		Utils.fillCircle(cloud.x + 20, 70 + i * 50, cloudCircles);
+		Utils.fillCircle(cloud.x - 40, 100 + i * 50, cloudCircles);
+		Utils.fillCircle(cloud.x + 40, 100 + i * 50, cloudCircles);
+	}
+}
+
 //Draw signature
 function signature(x, y) {
 	context.beginPath();
@@ -125,16 +153,7 @@ function movingClouds() {
 		Utils.fillCircle(width / 2, height / 3, 175);
 	}
 
-	context.fillStyle = "white";
-	xCloud += speed;
-	if (xCloud > width + cloudCircles) {
-		xCloud = -cloudCircles;
-	}
-	Utils.fillCircle(xCloud, 100, cloudCircles);
-	Utils.fillCircle(xCloud - 20, 70, cloudCircles);
-	Utils.fillCircle(xCloud + 20, 70, cloudCircles);
-	Utils.fillCircle(xCloud - 40, 100, cloudCircles);
-	Utils.fillCircle(xCloud + 40, 100, cloudCircles);
+	makeClouds();
 
 	signature(width - 65, height - 65);
 
